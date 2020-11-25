@@ -1,0 +1,65 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: mssql_react_crud1_dev_container
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    hostname: db
+    networks:
+      - network
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Pa55w0rd!
+      - MSSQL_SA_PASSWORD=Pa55w0rd!
+      - MSSQL_PID=Express
+    ports:
+      - target: 1433
+        published: 1433
+        protocol: tcp
+        mode: host
+    volumes:
+      - data_volume:/var/opt/mssql
+  api:
+    container_name: aspnet_react_crud1_dev_container
+    restart: always
+    hostname: api
+    build: .
+    networks:
+      - network
+    environment:
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=5001
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - target: 80
+        published: 5000
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 5001
+        protocol: tcp
+        mode: host
+    depends_on:
+      - db
+    volumes:
+      - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    entrypoint: [
+        './wait-for-it.sh',
+        'db:1433',
+        '-t',
+        '190',
+        '--',
+        'dotnet',
+        'ReactAspCoreCrud1.dll',
+    ]
+networks:
+  network:
+    driver: bridge
+volumes:
+  data_volume:
+    driver: local
