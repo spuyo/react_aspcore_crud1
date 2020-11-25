@@ -79,3 +79,13 @@ npm i -s axios
 npm i -s @material-ui/core @material-ui/icons
 npm i -s react-toast-notifications
 ```
+
+## Docker
+Build the docker env to test
+> "%cd%" needed for windows otherwise ${PWD} is used
+```bash
+docker container rm dev-react
+docker run -v "%cd%":/app -v /app/node_modules -p 3000:3000 -it --rm --name dev-react react-dev
+```
+
+

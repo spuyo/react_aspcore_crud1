@@ -1,0 +1,26 @@
+# Build image STAGE 1
+FROM node:14.15.1-alpine3.11 as build-stage
+
+# change working directory to the app directory
+WORKDIR /app
+
+# copy package.json from current filesystem to workingdir
+COPY package*.json /app/
+
+# install items needed on alpine linux for npm to install modules correctly
+RUN apk --no-cache add g++ gcc libgcc libstdc++ linux-headers make python
+
+# install node-gyp -system specific and needs to be installed before modules
+RUN npm install --silent node-gyp -g
+
+# install package.json modules
+RUN npm install --quiet
+
+# Copy all currently made items into Working directory
+COPY ./ /app/
+
+# expose this port
+EXPOSE 3000
+
+# run this command on run
+CMD ["npm", "run", "start"]
