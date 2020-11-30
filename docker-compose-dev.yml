@@ -64,13 +64,13 @@ services:
     hostname: client
     build:
       context: ./react-aspcore-crud1
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     networks:
       - front_network
     environment:
       NODE_ENV: development
     ports:
-      - target: 80
+      - target: 3000
         published: 80
         protocol: tcp
         mode: host
@@ -79,7 +79,8 @@ services:
     volumes:
       - ./react-aspcore-crud1:/app
       - node_modules:/app/node_modules
-    
+    command: npm run start
+
 networks:
   back_network:
     driver: bridge

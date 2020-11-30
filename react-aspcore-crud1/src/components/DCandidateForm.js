@@ -47,7 +47,7 @@ const DCandidateForm = ({classes, ...props}) => {
     // validate() full form validation
     // validate({ fullName: 'jenny'}) partial validation
     const validate = (fieldValues = values) => {
-        let temp={...errors}
+        let temp = {...errors}
         if ('fullName' in fieldValues)
             temp.fullName = fieldValues.fullName ? "" : "This field is required"
         if ('mobile' in fieldValues)
@@ -90,7 +90,7 @@ const DCandidateForm = ({classes, ...props}) => {
             if (props.currentId === 0) // insert
                 props.createDCandidate(values, onSuccess)
             else // update
-                props.updateDCandidate(props.currentId.values, onSuccess)
+                props.updateDCandidate(props.currentId, values, onSuccess)
         }
     }
     

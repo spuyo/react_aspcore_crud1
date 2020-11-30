@@ -17,6 +17,7 @@ namespace ReactAspCoreCrud1
 {
     public class Startup
     {
+        private readonly string MyAllowedSpecificOrigins = "MyAllowedSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,14 +35,25 @@ namespace ReactAspCoreCrud1
                 options => options.UseSqlServer(Configuration.GetConnectionString("DevConnection"))
                 );
             // configure cors
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowedSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost",
+                            "https://localhost")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // configure cors here
-            app.UseCors(options => options.WithOrigins("https://localhost:5001").AllowAnyHeader().AllowAnyMethod());
+            // app.UseCors(options => options.WithOrigins("https://localhost:5001").AllowAnyHeader().AllowAnyMethod());
+            app.UseCors(MyAllowedSpecificOrigins);
             
             if (env.IsDevelopment())
             {

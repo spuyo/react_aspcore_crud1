@@ -27,7 +27,7 @@ export const fetchAll = () => dispatch => {
 
 export const create = (data, onSuccess) => dispatch => {
     data = formatData(data)
-    api.dCandidate().create()
+    api.dCandidate().create(data)
         .then(res => {
             dispatch({
                 type: ACTION_TYPE.CREATE,
@@ -50,7 +50,7 @@ export const update = (id, data, onSuccess) => dispatch => {
         })
         .catch(err => console.log(err))
 }
-export const Delete = (id, data, onSuccess) => dispatch => {
+export const Delete = (id, onSuccess) => dispatch => {
     
     api.dCandidate().delete(id)
         .then(res => {
