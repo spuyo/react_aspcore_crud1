@@ -1,5 +1,4 @@
-# todo
-
+# INit starting out this project
 do migrations - no db connection needed, just creates classes
 ```bash
 dotnet ef migrations add InitialMigration
@@ -18,20 +17,34 @@ dotnet dev-certs https --trust
 dotnet user-secrets set "Kestrel:Certificates:Development:Password" "Pa55w0rd!"
 ```
 
-## Run docker compose
+## Running local development
 Run dev project. only the client has active development
 ```bash
-docker-compose -f docker-compose-dev.yml up --build
-```
-Build the full project, non dev version. Has nginx on client
-```bash 
-docker-compose build
+docker-compose -f docker-compose-dev.yml build --no-cache
 ```
 Start
 ```bash
-docker-compose up
+docker-compose -f docker-compose-dev.yml up
 ```
-Or build and start all in one
+
+## Running the "prod" environment
+build the images
+> add `--no-cache` if having errors or needing rebuild
 ```bash
-docker-compose up --build
+# build the client
+docker build -f ./react-aspcore-crud1/Dockerfile -t client_react_crud1_image ./react-aspcore-crud1/
+# build the back end
+docker build -t aspnet_react_crud1_image .
+```
+Then Run the images in docker-compose
+```bash
+docker-compose up -d
+```
+Then View the application at `http://localhost/`, no SSL setup on client just api
+
+
+## Running the dev environment with live reloading on client and api
+build
+```bash
+docker-compose -f docker-compose-dev.yml build --no-cache
 ```

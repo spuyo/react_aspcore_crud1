@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    container_name: mssql_react_crud1_dev_container
+    container_name: mssql_react_crud1_container
     image: mcr.microsoft.com/mssql/server:2019-latest
     restart: always
     hostname: db
@@ -21,10 +21,10 @@ services:
     volumes:
       - data_volume:/var/opt/mssql
   api:
-    container_name: aspnet_react_crud1_dev_container
+    container_name: aspnet_react_crud1_container
     restart: always
     hostname: api
-    build: .
+    image: aspnet_react_crud1_image
     networks:
       - back_network
       - front_network
@@ -59,12 +59,10 @@ services:
         'ReactAspCoreCrud1.dll',
     ]
   client:
-    container_name: client_react_crud1_dev_container
+    container_name: client_react_crud1_container
     restart: always
     hostname: client
-    build:
-      context: ./react-aspcore-crud1
-      dockerfile: Dockerfile
+    image: client_react_crud1_image
     networks:
       - front_network
     environment:

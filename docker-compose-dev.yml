@@ -24,7 +24,9 @@ services:
     container_name: aspnet_react_crud1_dev_container
     restart: always
     hostname: api
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     networks:
       - back_network
       - front_network
@@ -44,20 +46,13 @@ services:
     depends_on:
       - db
     volumes:
+      - ./:/app
       - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets
       - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/
     working_dir: /app
     stdin_open: true
     tty: true
-    entrypoint: [
-        './wait-for-it.sh',
-        'db:1433',
-        '-t',
-        '190',
-        '--',
-        'dotnet',
-        'ReactAspCoreCrud1.dll',
-    ]
+    command: dotnet watch -- --verbose run --no-launch-profile
   client:
     container_name: client_react_crud1_dev_container
     restart: always
@@ -80,7 +75,7 @@ services:
       - ./react-aspcore-crud1:/app
       - node_modules:/app/node_modules
     command: npm run start
-
+    
 networks:
   back_network:
     driver: bridge

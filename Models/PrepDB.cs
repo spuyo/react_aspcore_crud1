@@ -18,6 +18,10 @@ namespace ReactAspCoreCrud1.Models
 
         public static void SeedData(DonationDBContext context)
         {
+            // wait for 2 minutes for mysql if preping
+            System.Console.WriteLine("Wait 2 minutes for sql server.");
+            System.Threading.Thread.Sleep(120000);
+            System.Console.WriteLine("Done waiting for sql server...");
             // applies the database schema
             System.Console.WriteLine("Applying Migrations...");
             context.Database.Migrate();

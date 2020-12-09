@@ -28,8 +28,6 @@ namespace ReactAspCoreCrud1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
             // configure db connection
             services.AddDbContext<DonationDBContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DevConnection"))
@@ -46,6 +44,7 @@ namespace ReactAspCoreCrud1
                             .AllowAnyMethod();
                     });
             });
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +66,10 @@ namespace ReactAspCoreCrud1
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
