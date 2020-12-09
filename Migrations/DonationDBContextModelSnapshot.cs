@@ -45,6 +45,8 @@ namespace ReactAspCoreCrud1.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("fullName");
+
                     b.ToTable("DCandidates");
                 });
 #pragma warning restore 612, 618
